@@ -12,23 +12,16 @@ module Single_Cycle_Top(clk,rst);
 
     input clk,rst;
 
-    wire [31:0] PC_Top,RD_Instr,RD1_Top,Imm_Ext_Top,ALUResult,ReadData,PCPlus4,RD2_Top,SrcB,Result,Target_Addr,PC_Next;
+    wire [31:0] PC_Top,RD_Instr,RD1_Top,Imm_Ext_Top,ALUResult,ReadData,PCPlus4,RD2_Top,SrcB,Result,Target_Addr;
     wire RegWrite,MemWrite,ALUSrc,ResultSrc,PCSrc,Zero;
     wire [1:0]ImmSrc;
     wire [2:0]ALUControl_Top;
-    
-    Mux Mux_PC_Src(
-                    .a(PCPlus4),
-                    .b(Target_Addr),
-                    .s(PCSrc),
-                    .c(PC_Next)
-    );
 
     PC_Module PC(
         .clk(clk),
         .rst(rst),
         .PC(PC_Top),
-        .PC_Next(PC_Next)
+        .PC_Next(PCPlus4)
     );
 
     PC_Adder PC_Adder(
@@ -62,7 +55,7 @@ module Single_Cycle_Top(clk,rst);
 
     Sign_Extend Sign_Extend(
                         .In(RD_Instr),
-                        .ImmSrc(ImmSrc),
+                        .ImmSrc(ImmSrc[0]),
                         .Imm_Ext(Imm_Ext_Top)
     );
 
